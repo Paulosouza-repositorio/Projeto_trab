@@ -19,6 +19,7 @@ google-auth==2.38.0
 google-auth-oauthlib==1.2.1
 greenlet==3.0.3
 gspread==6.1.4
+gunicorn==23.0.0
 h11==0.14.0
 httplib2==0.22.0
 hyperlink==21.0.0
