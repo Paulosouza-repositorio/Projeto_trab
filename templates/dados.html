@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Dados Submetidos</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h2>📋 Dados Submetidos</h2>
+  <a href="{{ url_for('index') }}">🔙 Voltar</a> |
+  <a href="{{ url_for('download') }}">⬇️ Baixar CSV</a>
+  <br><br>
+  {% if linhas %}
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers %}
+            <th>{{ header }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for linha in linhas %}
+          <tr>
+            {% for celula in linha %}
+              <td>{{ celula }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nenhum dado foi enviado ainda.</p>
+  {% endif %}
+</body>
+</html>
