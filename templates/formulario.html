@@ -125,7 +125,7 @@
         <label class="form-check-label" for="tem_plano_nao">Não</label>
       </div>
     </div>
-    
+
     <div class="mb-3" id="campo_plano" style="display: none;">
       <label for="plano_atual" class="form-label">Qual plano?</label>
       <select class="form-select" name="plano_atual" id="plano_atual">
@@ -138,8 +138,13 @@
       </select>
     </div>
 
+    <div class="mb-3" id="campo_valor" style="display: none;">
+      <label for="valor_pago" class="form-label">Valor pago atualmente</label>
+      <input type="text" name="valor_pago" class="form-control" placeholder="R$">
+    </div>
+
     <div class="mb-3">
-      <label class="form-label">Tipo de plano anterior:</label><br>
+      <label class="form-label">Tipo de plano:</label>
       <select class="form-select" name="tipo_plano">
         <option value="">Selecione</option>
         <option value="Empresarial">Empresarial</option>
@@ -147,7 +152,60 @@
         <option value="Familiar">Familiar</option>
       </select>
     </div>
-    
+
+    <!-- Tipo Pessoa -->
+    <div class="mb-3">
+      <label class="form-label">Tipo de pessoa:</label>
+      <select name="tipo_pessoa" id="tipo_pessoa" class="form-select" required>
+        <option value="">Selecione</option>
+        <option value="pf">Pessoa Física</option>
+        <option value="pj">Pessoa Jurídica</option>
+      </select>
+    </div>
+
+    <!-- CPF -->
+    <div class="mb-3" id="campo_cpf" style="display: none;">
+      <label for="cpf" class="form-label">CPF</label>
+      <input type="text" name="cpf" class="form-control">
+    </div>
+
+    <!-- Campos PJ -->
+    <div id="campos_pj" style="display: none;">
+      <div class="mb-3">
+        <label for="cnpj" class="form-label">CNPJ</label>
+        <input type="text" name="cnpj" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="mei" class="form-label">É MEI?</label>
+        <select name="mei" class="form-select">
+          <option value="">Selecione</option>
+          <option value="Sim">Sim</option>
+          <option value="Não">Não</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="tempo_abertura" class="form-label">Tempo de abertura da empresa</label>
+        <input type="text" name="tempo_abertura" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="quantas_vidas" class="form-label">Quantas vidas?</label>
+        <input type="number" name="quantas_vidas" class="form-control">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="idade_vidas" class="form-label">Idade das vidas</label>
+      <input type="text" name="idade_vidas" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label for="bairro" class="form-label">Bairro onde reside</label>
+      <input type="text" name="bairro" class="form-control">
+    </div>
+
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" name="interesse_novo" id="interesse_novo" value="sim">
       <label class="form-check-label" for="interesse_novo">Tenho interesse em contratar um novo plano</label>
@@ -166,43 +224,8 @@
       <textarea name="comentario_adicional" class="form-control" rows="3"></textarea>
     </div>
 
-    <div class="mb-3">
-      <label for="arquivo" class="form-label">Anexar arquivo</label>
-      <input type="file" name="arquivo" class="form-control">
-    </div>
-
     <button type="submit" class="btn btn-dark mt-3 w-100">Enviar</button>
   </form>
-</div>
-
-<!-- Modal para Golden Cross -->
-<div class="modal fade golden-cross-modal" id="goldenCrossModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <span class="golden-cross-badge">OFERTA EXCLUSIVA</span> para clientes Golden Cross!
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <div class="modal-body">
-        <h4 class="text-center mb-4">🎉 Bem-vindo à Luminus Conecta!</h4>
-        <p>Como ex-cliente Golden Cross, você tem direito a:</p>
-        <ul class="list-group mb-3">
-          <li class="list-group-item">✅ <strong>15% de desconto</strong> nos primeiros 3 meses</li>
-          <li class="list-group-item">✅ <strong>Carência reduzida</strong> em exames e consultas</li>
-          <li class="list-group-item">✅ <strong>Brinde exclusivo</strong> na contratação</li>
-        </ul>
-        <div class="alert alert-info">
-          <small>Esta oferta é válida apenas para migrações realizadas até <strong>30/06/2025</strong>.</small>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btnAceitarOferta">Quero esta oferta!</button>
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Continuar sem desconto</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <footer>
@@ -210,11 +233,28 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
     welcomeModal.show();
+
+    const tipoPessoaSelect = document.getElementById('tipo_pessoa');
+    const campoCPF = document.getElementById('campo_cpf');
+    const camposPJ = document.getElementById('campos_pj');
+    const campoPlano = document.getElementById('campo_plano');
+    const campoValor = document.getElementById('campo_valor');
+
+    tipoPessoaSelect.addEventListener('change', function () {
+      campoCPF.style.display = this.value === 'pf' ? 'block' : 'none';
+      camposPJ.style.display = this.value === 'pj' ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('input[name="tem_plano"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        campoPlano.style.display = this.value === 'sim' ? 'block' : 'none';
+        campoValor.style.display = this.value === 'sim' ? 'block' : 'none';
+      });
+    });
 
     {% with messages = get_flashed_messages(category_filter=["popup"]) %}
       {% if 'golden_cross' in messages %}
@@ -223,26 +263,7 @@
       {% endif %}
     {% endwith %}
   });
-
-  document.querySelectorAll('input[name="tem_plano"]').forEach(radio => {
-    radio.addEventListener('change', function () {
-      document.getElementById('campo_plano').style.display = (this.value === 'sim') ? 'block' : 'none';
-    });
-  });
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
