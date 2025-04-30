@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Leads Cadastrados</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 14px; }
+        th, td { border: 1px solid #ccc; padding: 5px; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <h1>Leads Recebidos</h1>
+    <a href="{{ url_for('exportar_csv') }}">Exportar para CSV</a> |
+    <a href="{{ url_for('logout') }}">Sair</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Plano atual</th>
+                <th>Tipo Plano</th>
+                <th>Valor Pago</th>
+                <th>Cidade</th>
+                <th>Bairro</th>
+                <th>Mais...</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in dados %}
+            <tr>
+                <td>{{ lead[1] }}</td>
+                <td>{{ lead[2] }}</td>
+                <td>{{ lead[3] }}</td>
+                <td>{{ lead[4] }}</td>
+                <td>{{ lead[7] }}</td>
+                <td>{{ lead[9] }}</td>
+                <td>{{ lead[8] }}</td>
+                <td>{{ lead[5] }}</td>
+                <td>{{ lead[16] }}</td>
+                <td>
+                    <details>
+                        <summary>Ver</summary>
+                        <p><strong>CPF:</strong> {{ lead[10] }}</p>
+                        <p><strong>CNPJ:</strong> {{ lead[11] }}</p>
+                        <p><strong>É MEI:</strong> {{ lead[12] }}</p>
+                        <p><strong>Vidas:</strong> {{ lead[14] }}</p>
+                        <p><strong>Idades:</strong> {{ lead[15] }}</p>
+                        <p><strong>Interesse:</strong> {{ lead[17] }}</p>
+                        <p><strong>Contato autorizado:</strong> {{ lead[18] }}</p>
+                        <p><strong>Comentário:</strong> {{ lead[19] }}</p>
+                    </details>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

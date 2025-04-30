@@ -2,51 +2,200 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luminus Conecta - Formulário</title>
   <link rel="icon" href="logo.png.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background-color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    header {
-      background-color: #ffffff;
-      color: rgb(12, 12, 12);
-      padding: 1.5rem 1rem;
-      text-align: center;
-    }
-    .logo {
-      max-height: 80px;
-      margin-bottom: 10px;
-    }
-    .container {
-      max-width: 700px;
-      margin-top: 30px;
-      margin-bottom: 30px;
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9em;
-      color: #888;
-    }
-    .golden-cross-modal .modal-header {
-      background-color: #ffc107;
-      color: #000;
-    }
-    .golden-cross-badge {
-      background-color: #ffc107;
-      color: #000;
-      font-weight: bold;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
+   /* Definição de cores e fontes gerais */
+body {
+  background-color: #000;
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+}
+
+/* Header */
+header {
+  background-color: #000;
+  color: #fff;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.logo {
+  max-height: 80px;
+  margin-bottom: 10px;
+}
+
+/* Container do formulário */
+.container {
+  max-width: 700px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background: transparent;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* Modal Golden Cross */
+.golden-cross-modal .modal-header {
+  background-color: #000;
+  color: #fff;
+}
+
+.golden-cross-modal .modal-body,
+.golden-cross-modal .modal-footer {
+  background-color: #000;
+  color: #fff;
+}
+
+.golden-cross-badge {
+  background-color: #ffc107;
+  color: #000;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.modal-content {
+  border-radius: 10px;
+  background-color: #000;
+}
+
+.modal-header .modal-title {
+  color: #fff;
+}
+
+/* Estilos do formulário */
+form {
+  background: transparent;
+}
+
+/* Alerta (sucesso ou erro) */
+.alert {
+  color: #000;
+}
+
+.alert-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.alert-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.alert .btn-close {
+  background-color: #fff;
+}
+
+/* Seleção de Tipo de Plano */
+select.form-select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.form-select:focus {
+  border-color: #ffc107;
+  background-color: #444;
+  color: #fff;
+}
+
+/* Campos de input */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select.form-select,
+textarea {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select.form-select:focus,
+textarea:focus {
+  border-color: #ffc107;
+  background-color: #444;
+  color: #fff;
+}
+
+/* Botões */
+button {
+  background-color: #ffc107;
+  color: #000;
+  border: 1px solid #ffc107;
+}
+
+button:hover {
+  background-color: #e0a800;
+  color: #fff;
+}
+
+/* Estilos de Modal (alerta Golden Cross) */
+.modal-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modal-body li {
+  padding: 5px 0;
+}
+
+.modal-footer .btn-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.modal-footer .btn-warning:hover {
+  background-color: #e0a800;
+  color: #fff;
+}
+
+/* Para garantir que o texto do label seja branco dentro do campo de idade das vidas */
+#campo_idade_vidas label {
+  color: #fff;
+}
+
+/* Para garantir que os campos de idade das vidas tenham fundo escuro e texto branco */
+#campo_idade_vidas input {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+#campo_idade_vidas input:focus {
+  border-color: #ffc107;
+  background-color: #444;
+  color: #fff;
+}
+
+/* Se o número de vidas for mais de 1, ajustar o estilo das idades */
+#campo_idade_vidas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#campo_idade_vidas input 
+  padding: 10px;
   </style>
+  
 </head>
 <body>
 
@@ -67,7 +216,7 @@
           <li><strong>Carência reduzida</strong> para procedimentos</li>
           <li><strong>Benefícios exclusivos</strong> no primeiro ano</li>
         </ul>
-        <p class="text-center mt-3">Selecione "Golden Cross" no formulário para conhecer sua oferta personalizada!</p>
+        <p class="text-center mt-3">Selecione "Golden Cross" no formulário para receber uma oferta especial!</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Entendi</button>
@@ -77,7 +226,7 @@
 </div>
 
 <header>
-  <img src="{{ url_for('static', filename='logo_luminus.png') }}" class="logo" alt="Luminus Conecta">
+  <img src="{{ url_for('static', filename='logo-luminus-pequena.png') }}" class="logo" alt="Luminus Conecta">
   <h5>Conectando você ao seu próximo plano de saúde. Preencha o formulário abaixo e receba nosso contato.</h5>
 </header>
 
@@ -153,53 +302,56 @@
       </select>
     </div>
 
-    <!-- Tipo Pessoa -->
-    <div class="mb-3">
-      <label class="form-label">Tipo de pessoa:</label>
-      <select name="tipo_pessoa" id="tipo_pessoa" class="form-select" required>
-        <option value="">Selecione</option>
-        <option value="pf">Pessoa Física</option>
-        <option value="pj">Pessoa Jurídica</option>
-      </select>
-    </div>
+   <!-- Tipo Pessoa -->
+<div class="mb-3">
+  <label class="form-label"></label><br>
+  <div class="btn-group" role="group" aria-label="Tipo de Pessoa">
+    <input type="radio" class="btn-check" name="tipo_pessoa" id="pf_btn" value="pf" autocomplete="off">
+    <label class="btn btn-outline-primary" for="pf_btn">Pessoa Física</label>
 
-    <!-- CPF -->
-    <div class="mb-3" id="campo_cpf" style="display: none;">
-      <label for="cpf" class="form-label">CPF</label>
-      <input type="text" name="cpf" class="form-control">
-    </div>
+    <input type="radio" class="btn-check" name="tipo_pessoa" id="pj_btn" value="pj" autocomplete="off">
+    <label class="btn btn-outline-primary" for="pj_btn">Pessoa Jurídica</label>
+  </div>
+</div>
 
-    <!-- Campos PJ -->
-    <div id="campos_pj" style="display: none;">
-      <div class="mb-3">
-        <label for="cnpj" class="form-label">CNPJ</label>
-        <input type="text" name="cnpj" class="form-control">
-      </div>
+<!-- CPF -->
+<div class="mb-3" id="campo_cpf" style="display: none;">
+  <label for="cpf" class="form-label">CPF</label>
+  <input type="text" name="cpf" class="form-control">
+</div>
 
-      <div class="mb-3">
-        <label for="mei" class="form-label">É MEI?</label>
-        <select name="mei" class="form-select">
-          <option value="">Selecione</option>
-          <option value="Sim">Sim</option>
-          <option value="Não">Não</option>
-        </select>
-      </div>
+<!-- Campos PJ -->
+<div id="campos_pj" style="display: none;">
+  <div class="mb-3">
+    <label for="cnpj" class="form-label">CNPJ</label>
+    <input type="text" name="cnpj" class="form-control">
+  </div>
 
-      <div class="mb-3">
-        <label for="tempo_abertura" class="form-label">Tempo de abertura da empresa</label>
-        <input type="text" name="tempo_abertura" class="form-control">
-      </div>
+  <div class="mb-3">
+    <label for="mei" class="form-label">É MEI?</label>
+    <select name="mei" class="form-select">
+      <option value="">Selecione</option>
+      <option value="Sim">Sim</option>
+      <option value="Não">Não</option>
+    </select>
+  </div>
 
-      <div class="mb-3">
-        <label for="quantas_vidas" class="form-label">Quantas vidas?</label>
-        <input type="number" name="quantas_vidas" class="form-control">
-      </div>
-    </div>
+  <div class="mb-3">
+    <label for="tempo_abertura" class="form-label">Tempo de abertura da empresa</label>
+    <input type="text" name="tempo_abertura" class="form-control">
+  </div>
 
-    <div class="mb-3">
-      <label for="idade_vidas" class="form-label">Idade das vidas</label>
-      <input type="text" name="idade_vidas" class="form-control">
-    </div>
+  <div class="mb-3">
+    <label for="quantas_vidas" class="form-label">Quantas vidas?</label>
+    <input type="number" name="quantas_vidas" class="form-control">
+  </div>
+</div>
+
+<!-- Idade das vidas -->
+<div class="mb-3" id="container_idades" style="display: none;">
+  <label class="form-label">Idade das vidas</label>
+  <div id="campos_idade_vidas"></div>
+</div>
 
     <div class="mb-3">
       <label for="bairro" class="form-label">Bairro onde reside</label>
@@ -238,17 +390,20 @@
     const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
     welcomeModal.show();
 
-    const tipoPessoaSelect = document.getElementById('tipo_pessoa');
     const campoCPF = document.getElementById('campo_cpf');
     const camposPJ = document.getElementById('campos_pj');
     const campoPlano = document.getElementById('campo_plano');
     const campoValor = document.getElementById('campo_valor');
 
-    tipoPessoaSelect.addEventListener('change', function () {
-      campoCPF.style.display = this.value === 'pf' ? 'block' : 'none';
-      camposPJ.style.display = this.value === 'pj' ? 'block' : 'none';
+    // Controle de tipo de pessoa via botão
+    document.querySelectorAll('input[name="tipo_pessoa"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        campoCPF.style.display = this.value === 'pf' ? 'block' : 'none';
+        camposPJ.style.display = this.value === 'pj' ? 'block' : 'none';
+      });
     });
 
+    // Mostrar campos adicionais se tiver plano de saúde
     document.querySelectorAll('input[name="tem_plano"]').forEach(radio => {
       radio.addEventListener('change', function () {
         campoPlano.style.display = this.value === 'sim' ? 'block' : 'none';
@@ -263,6 +418,51 @@
       {% endif %}
     {% endwith %}
   });
+  document.addEventListener('DOMContentLoaded', function () {
+  const campoCPF = document.getElementById('campo_cpf');
+  const camposPJ = document.getElementById('campos_pj');
+  const containerIdades = document.getElementById('container_idades');
+  const camposIdadeVidas = document.getElementById('campos_idade_vidas');
+  const quantasVidasInput = document.querySelector('input[name="quantas_vidas"]');
+
+  // Botões tipo de pessoa
+  const pfBtn = document.getElementById('pf_btn');
+  const pjBtn = document.getElementById('pj_btn');
+
+  pfBtn.addEventListener('change', function () {
+    if (this.checked) {
+      campoCPF.style.display = 'block';
+      camposPJ.style.display = 'none';
+      containerIdades.style.display = 'none';
+    }
+  });
+
+  pjBtn.addEventListener('change', function () {
+    if (this.checked) {
+      campoCPF.style.display = 'none';
+      camposPJ.style.display = 'block';
+    }
+  });
+
+  quantasVidasInput.addEventListener('input', function () {
+    camposIdadeVidas.innerHTML = '';
+    const quantidade = parseInt(this.value);
+    if (!isNaN(quantidade) && quantidade > 0 && quantidade <= 20) {
+      containerIdades.style.display = 'block';
+      for (let i = 1; i <= quantidade; i++) {
+        const div = document.createElement('div');
+        div.classList.add('mb-2');
+        div.innerHTML = `
+          <input type="number" name="idade_vida_${i}" class="form-control" placeholder="Idade da vida ${i}" required>
+        `;
+        camposIdadeVidas.appendChild(div);
+      }
+    } else {
+      containerIdades.style.display = 'none';
+    }
+  });
+});
+
 </script>
 
 </body>
