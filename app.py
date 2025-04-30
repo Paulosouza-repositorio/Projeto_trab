@@ -1,115 +1,175 @@
 import os
 import csv
 import smtplib
+import sqlite3
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
 from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_aqui'  # Troque por uma chave segura
 
-# Configuração para enviar e-mail
-EMAIL_HOST = 'pcbsouza@id.uff.br'  # Para Gmail
+# Configurações de e-mail
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USER = 'paulu2009@hotmail.com'  # Seu e-mail
-EMAIL_PASSWORD = 'kqqa sjmd zvlr qcsu'  # Senha do aplicativo (não a senha normal do Gmail)
+EMAIL_USER = 'pcbsouza@id.uff.br'
+EMAIL_PASSWORD = 'kqqa sjmd zvlr qcsu'  # Senha de app do Gmail
 
-# Pasta para salvar os arquivos CSV
+# Pasta para salvar CSVs exportados
 DATA_FOLDER = os.path.join(os.path.expanduser('~'), 'luminus_data')
 os.makedirs(DATA_FOLDER, exist_ok=True)
 
+# ===================== Banco de Dados =====================
+
+def init_db():
+    with sqlite3.connect('leads.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS leads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                data_hora TEXT,
+                nome TEXT,
+                email TEXT,
+                telefone TEXT,
+                cidade_estado TEXT,
+                tem_plano TEXT,
+                plano_atual TEXT,
+                valor_pago TEXT,
+                tipo_plano TEXT,
+                tipo_pessoa TEXT,
+                cpf TEXT,
+                cnpj TEXT,
+                mei TEXT,
+                tempo_abertura TEXT,
+                quantas_vidas TEXT,
+                idade_vidas TEXT,
+                bairro TEXT,
+                interesse_novo TEXT,
+                contato TEXT,
+                comentario_adicional TEXT
+            )
+        ''')
+        conn.commit()
+
+def salvar_no_banco(dados):
+    with sqlite3.connect('leads.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO leads (
+                data_hora, nome, email, telefone, cidade_estado, tem_plano,
+                plano_atual, valor_pago, tipo_plano, tipo_pessoa, cpf, cnpj,
+                mei, tempo_abertura, quantas_vidas, idade_vidas, bairro,
+                interesse_novo, contato, comentario_adicional
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            dados.get('nome'),
+            dados.get('email'),
+            dados.get('telefone'),
+            dados.get('cidade_estado'),
+            dados.get('tem_plano'),
+            dados.get('plano_atual'),
+            dados.get('valor_pago'),
+            dados.get('tipo_plano'),
+            dados.get('tipo_pessoa'),
+            dados.get('cpf'),
+            dados.get('cnpj'),
+            dados.get('mei'),
+            dados.get('tempo_abertura'),
+            dados.get('quantas_vidas'),
+            dados.get('idade_vidas'),
+            dados.get('bairro'),
+            dados.get('interesse_novo', 'Não'),
+            dados.get('contato'),
+            dados.get('comentario_adicional')
+        ))
+        conn.commit()
+
+# ===================== E-mail =====================
+
 def enviar_email(dados):
-    """Função para enviar email com os dados do formulário."""
     try:
         msg = MIMEMultipart()
         msg['From'] = EMAIL_USER
         msg['To'] = EMAIL_USER
         msg['Subject'] = 'Novo Formulário Enviado'
 
-        body = f"""
-        Dados do formulário:
-        Nome: {dados['nome']}
-        E-mail: {dados['email']}
-        Telefone: {dados['telefone']}
-        Cidade/Estado: {dados['cidade_estado']}
-        Tem plano: {dados['tem_plano']}
-        Plano atual: {dados.get('plano_atual', 'Não informado')}
-        Tipo de plano: {dados['tipo_plano']}
-        Interesse em novo plano: {dados.get('interesse_novo', 'Não')}
-        Autorização de contato: {dados['contato']}
-        Comentário adicional: {dados.get('comentario_adicional', 'Não informado')}
-        """
-
+        body = '\n'.join([f"{chave.capitalize().replace('_', ' ')}: {valor}" for chave, valor in dados.items()])
         msg.attach(MIMEText(body, 'plain'))
 
         with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT) as server:
             server.starttls()
             server.login(EMAIL_USER, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USER, EMAIL_USER, msg.as_string())
-            print('Email enviado com sucesso!')
-    
+
     except Exception as e:
         print(f'Erro ao enviar e-mail: {str(e)}')
 
-def salvar_dados_no_seu_pc(dados):
-    """Salva os dados no seu computador (servidor)"""
-    filename = f"clientes_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-    filepath = os.path.join(DATA_FOLDER, filename)
-
-    # Verifica se o arquivo já existe para não sobrescrever
-    counter = 1
-    while os.path.exists(filepath):
-        filename = f"clientes_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{counter}.csv"
-        filepath = os.path.join(DATA_FOLDER, filename)
-        counter += 1
-
-    # Escreve os dados no arquivo CSV
-    with open(filepath, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow([
-            'Data_Hora', 'Nome', 'Email', 'Telefone', 'Cidade_Estado',
-            'Tem_Plano', 'Plano_Atual', 'Tipo_Plano', 'Interesse_Novo_Plano',
-            'Autoriza_Contato', 'Comentarios'
-        ])
-        writer.writerow([
-            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            dados['nome'],
-            dados['email'],
-            dados['telefone'],
-            dados['cidade_estado'],
-            dados.get('tem_plano', 'não'),
-            dados.get('plano_atual', ''),
-            dados.get('tipo_plano', ''),
-            dados.get('interesse_novo', 'não'),
-            dados.get('contato', 'Não'),
-            dados.get('comentario_adicional', '')
-        ])
-
-    return filepath
+# ===================== Rotas =====================
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         try:
-            # Salva os dados no SEU computador
-            caminho_arquivo = salvar_dados_no_seu_pc(request.form)
-            print(f"Arquivo salvo com sucesso em: {caminho_arquivo}")
-
-            # Envia o e-mail com os dados
+            salvar_no_banco(request.form)
             enviar_email(request.form)
 
-            # Verifica se é Golden Cross para mostrar o popup
             if request.form.get('plano_atual') == 'Golden Cross':
                 flash('golden_cross', 'popup')
 
             flash('Formulário enviado com sucesso!', 'success')
         except Exception as e:
-            flash(f'Erro ao salvar dados ou enviar e-mail: {str(e)}', 'danger')
+            flash(f'Erro ao processar dados: {str(e)}', 'danger')
 
         return redirect(url_for('index'))
 
     return render_template('formulario.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form['usuario'] == 'admin' and request.form['senha'] == '123456':
+            session['logado'] = True
+            return redirect(url_for('leads'))
+        else:
+            flash('Credenciais inválidas!', 'danger')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.route('/leads')
+def leads():
+    if not session.get('logado'):
+        return redirect(url_for('login'))
+
+    with sqlite3.connect('leads.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM leads ORDER BY data_hora DESC')
+        dados = cursor.fetchall()
+
+    return render_template('leads.html', dados=dados)
+
+@app.route('/exportar')
+def exportar_csv():
+    if not session.get('logado'):
+        return redirect(url_for('login'))
+
+    caminho_csv = os.path.join(DATA_FOLDER, 'leads_exportados.csv')
+    with sqlite3.connect('leads.db') as conn, open(caminho_csv, 'w', newline='', encoding='utf-8') as f:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM leads')
+        colunas = [desc[0] for desc in cursor.description]
+        writer = csv.writer(f)
+        writer.writerow(colunas)
+        writer.writerows(cursor.fetchall())
+
+    return send_file(caminho_csv, as_attachment=True)
+
+# ===================== Inicialização =====================
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True)
