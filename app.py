@@ -90,21 +90,48 @@ def salvar_no_banco(dados):
 
 def enviar_email(dados):
     try:
+        vidas = int(dados.get('quantas_vidas', '0') or 0)
+        prioridade = 'ALTA PRIORIDADE' if vidas > 4 else 'Normal'
+
         msg = MIMEMultipart()
         msg['From'] = EMAIL_USER
         msg['To'] = EMAIL_USER
-        msg['Subject'] = 'Novo Formulário Enviado'
+        msg['Subject'] = f'Novo Formulário Enviado [{prioridade}]'
 
-        body = '\n'.join([f"{chave.capitalize().replace('_', ' ')}: {valor}" for chave, valor in dados.items()])
+        body = '\n'.join([
+            f"PRIORIDADE: {prioridade}",
+            f"Nome: {dados.get('nome')}",
+            f"E-mail: {dados.get('email')}",
+            f"Telefone: {dados.get('telefone')}",
+            f"Cidade/Estado: {dados.get('cidade_estado')}",
+            f"Tem plano: {dados.get('tem_plano')}",
+            f"Plano atual: {dados.get('plano_atual', 'Não informado')}",
+            f"Valor pago atualmente: {dados.get('valor_pago', 'Não informado')}",
+            f"Tipo de plano: {dados.get('tipo_plano')}",
+            f"Tipo de pessoa: {dados.get('tipo_pessoa')}",
+            f"CPF: {dados.get('cpf')}",
+            f"CNPJ: {dados.get('cnpj')}",
+            f"É MEI?: {dados.get('mei')}",
+            f"Tempo de abertura: {dados.get('tempo_abertura')}",
+            f"Quantas vidas: {dados.get('quantas_vidas')}",
+            f"Idade das vidas: {dados.get('idade_vidas')}",
+            f"Bairro: {dados.get('bairro')}",
+            f"Interesse em novo plano: {dados.get('interesse_novo', 'Não')}",
+            f"Autorização de contato: {dados.get('contato')}",
+            f"Comentário adicional: {dados.get('comentario_adicional', 'Não informado')}"
+        ])
+
         msg.attach(MIMEText(body, 'plain'))
 
         with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT) as server:
             server.starttls()
             server.login(EMAIL_USER, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USER, EMAIL_USER, msg.as_string())
+            print('Email enviado com sucesso!')
 
     except Exception as e:
         print(f'Erro ao enviar e-mail: {str(e)}')
+
 
 # ===================== Rotas =====================
 
