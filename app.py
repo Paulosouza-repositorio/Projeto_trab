@@ -10,11 +10,12 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_aqui'  # Troque por uma chave segura
 
-# Configurações de e-mail
-EMAIL_HOST = 'smtp.gmail.com'
+# Configurações de e-mail (GoDaddy Workspace Email)
+EMAIL_HOST = 'smtpout.secureserver.net'
 EMAIL_PORT = 587
-EMAIL_USER = 'pcbsouza@id.uff.br'
-EMAIL_PASSWORD = 'kqqa sjmd zvlr qcsu'  # Senha de app do Gmail
+EMAIL_USER = 'contato@luminusconecta.com'
+EMAIL_PASSWORD = 'Luminus2023!'  # Use a senha normal do e-mail da GoDaddy
+
 
 # Pasta para salvar CSVs exportados
 DATA_FOLDER = os.path.join(os.path.expanduser('~'), 'luminus_data')
